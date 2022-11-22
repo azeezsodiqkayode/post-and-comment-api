@@ -9,7 +9,7 @@ const { newUser , checkUser } = require('../models/users.models')
 const msgClass = require('../errors/error')
 
 
-const hashPassowrd = (password) => {
+const hashPassword = (password) => {
     
     return new Promise((resolve, reject) => {
 
@@ -41,7 +41,7 @@ const createNewUser = async (req, res) => {
     })
 
     const validateUser = userSchema.validate(req.body)
-    if (validateUser.error) {
+    if (validateUser.error) { 
         res.status(422).send({
             status: false,
             message: "Bad Request",
@@ -53,6 +53,7 @@ const createNewUser = async (req, res) => {
     //
     //const otp = generateOTP()
     const fullname = `${firstname} ${surname}`
+    const userID = uuidv4()
     try {
         const [err, checkIfUserExists] =  await doSomeAsyncMagik(checkUser(email, phone))
         if (err){
@@ -66,9 +67,8 @@ const createNewUser = async (req, res) => {
             throw new Error ("You are underage, Go away")
         }
         
-        const passwordHashed = await hashPassowrd(password)
-        await newUser( fullname, email, passwordHashed[1], phone, age, gender) 
-        
+        const passwordHashed = await hashPassword(password)
+        await newUser( fullname, email, passwordHashed[1], phone, age, gender, userID) 
         
         const dataReplacement = {
              "fullname": fullname,
@@ -95,5 +95,4 @@ const createNewUser = async (req, res) => {
 
 module.exports={
     createNewUser,
-    hashPassowrd
-}
+hashPassword}
