@@ -8,7 +8,6 @@ const { readFileAndSendEmail } = require('../services/email.services')
 const { newUser , checkUser } = require('../models/users.models')
 const msgClass = require('../errors/error')
 
-
 const hashPassword = (password) => {
     
     return new Promise((resolve, reject) => {
